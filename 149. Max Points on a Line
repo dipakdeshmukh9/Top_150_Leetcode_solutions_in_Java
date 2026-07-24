@@ -1,0 +1,32 @@
+class Solution {
+    public int maxPoints(int[][] points) {
+        
+        int n = points.length;
+        if (n <= 2) return n;
+
+        int ans = 0;
+
+        for (int[] p1 : points) {
+            double x1 = p1[0], y1 = p1[1];
+            HashMap<Double, Integer> map = new HashMap<>();
+
+            for (int[] p2 : points) {
+                if (p1 == p2) continue;
+
+                double x2 = p2[0], y2 = p2[1];
+                double slope;
+
+                if (x2 - x1 == 0) {
+                    slope = Double.POSITIVE_INFINITY;
+                } else {
+                    slope = (y2 - y1) / (x2 - x1);
+                }
+
+                map.put(slope, map.getOrDefault(slope, 0) + 1);
+                ans = Math.max(ans, map.get(slope));
+            }
+        }
+
+        return ans + 1;
+    }
+}
