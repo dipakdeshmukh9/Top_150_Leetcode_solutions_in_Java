@@ -1,0 +1,50 @@
+class Solution {
+
+    boolean isSafe(int r, int c, char[][] board) {
+
+        for (int i = 0; i < r; i++) {
+            if (board[i][c] == 'Q') return false;
+        }
+
+        for (int i = r - 1, j = c - 1; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 'Q') return false;
+        }
+
+        for (int i = r - 1, j = c + 1; i >= 0 && j < board.length; i--, j++) {
+            if (board[i][j] == 'Q') return false;
+        }
+
+        return true;
+    }
+
+    void backtrack(int r, List<List<String>> res, char[][] board) {
+        if (r == board.length) {
+            List<String> temp = new ArrayList<>();
+            for (char[] row : board) {
+                temp.add(new String(row));
+            }
+            res.add(temp);
+            return;
+        }
+
+        for (int c = 0; c < board.length; c++) {
+            if (isSafe(r, c, board)) {
+                board[r][c] = 'Q';
+                backtrack(r + 1, res, board);
+                board[r][c] = '.';
+            }
+        }
+    }
+
+    public int totalNQueens(int n) {
+        List<List<String>> res = new ArrayList<>();
+
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            java.util.Arrays.fill(board[i], '.');
+        }
+
+        backtrack(0, res, board);
+        return res.size();
+    }
+}
