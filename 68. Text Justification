@@ -1,0 +1,77 @@
+class Solution {
+
+    private String buildLine(List<String> lineWords, int maxWidth, boolean isLastLine) {
+        if (lineWords.isEmpty()) {
+            return " ".repeat(maxWidth);
+        }
+
+        int wordCount = lineWords.size();
+        int totalChars = 0;
+
+        for (String word : lineWords) {
+            totalChars += word.length();
+        }
+
+        int totalSpaces = maxWidth - totalChars;
+
+        if (wordCount == 1 || isLastLine) {
+            StringBuilder line = new StringBuilder(lineWords.get(0));
+
+            for (int i = 1; i < wordCount; i++) {
+                line.append(" ").append(lineWords.get(i));
+            }
+
+            while (line.length() < maxWidth) {
+                line.append(" ");
+            }
+
+            return line.toString();
+        } else {
+            int spaceSlots = wordCount - 1;
+            int baseSpace = totalSpaces / spaceSlots;
+            int extraSpace = totalSpaces % spaceSlots;
+
+            StringBuilder line = new StringBuilder(lineWords.get(0));
+
+            for (int i = 1; i < wordCount; i++) {
+                int spaces = baseSpace + (i <= extraSpace ? 1 : 0);
+
+                for (int j = 0; j < spaces; j++) {
+                    line.append(" ");
+                }
+
+                line.append(lineWords.get(i));
+            }
+
+            return line.toString();
+        }
+    }
+
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+
+        if (maxWidth == 0 || words.length == 0) {
+            return result;
+        }
+
+        List<String> currentLine = new ArrayList<>();
+        int currentLength = 0;
+
+        for (String word : words) {
+            if (currentLine.size() + word.length() + currentLength > maxWidth) {
+                result.add(buildLine(currentLine, maxWidth, false));
+                currentLine.clear();
+                currentLength = 0;
+            }
+
+            currentLine.add(word);
+            currentLength += word.length();
+        }
+
+        if (!currentLine.isEmpty()) {
+            result.add(buildLine(currentLine, maxWidth, true));
+        }
+
+        return result;
+    }
+}
