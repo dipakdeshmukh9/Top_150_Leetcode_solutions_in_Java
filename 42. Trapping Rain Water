@@ -1,0 +1,21 @@
+class Solution {
+    public int trap(int[] height) {
+        int s = 0, e = height.length - 1;
+        int ans = 0, lmax = 0, rmax = 0;
+
+        while (s <= e) {
+            lmax = Math.max(lmax, height[s]);
+            rmax = Math.max(rmax, height[e]);
+
+            if (lmax < rmax) {
+                ans += lmax - height[s];
+                s++;
+            } else {
+                ans += rmax - height[e];
+                e--;
+            }
+        }
+
+        return ans;
+    }
+}
