@@ -1,0 +1,48 @@
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        
+        List<Integer> result = new ArrayList<>();
+
+        int wordSize = words[0].length();
+        int wordCount = words.length;
+        int totalSize = wordSize * wordCount;
+
+        Map<String, Integer> wordFreq = new HashMap<>();
+        for (String word : words) {
+            wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+        }
+
+        for (int i = 0; i < wordSize; i++) {
+            int left = i, right = i, count = 0;
+            Map<String, Integer> currentFreq = new HashMap<>();
+
+            while (right + wordSize <= s.length()) {
+                String currentWord = s.substring(right, right + wordSize);
+                right += wordSize;
+
+                if (wordFreq.containsKey(currentWord)) {
+                    currentFreq.put(currentWord,
+                            currentFreq.getOrDefault(currentWord, 0) + 1);
+                    count++;
+
+                    while (currentFreq.get(currentWord) > wordFreq.get(currentWord)) {
+                        String leftWord = s.substring(left, left + wordSize);
+                        left += wordSize;
+                        currentFreq.put(leftWord, currentFreq.get(leftWord) - 1);
+                        count--;
+                    }
+
+                    if (count == wordCount) {
+                        result.add(left);
+                    }
+                } else {
+                    currentFreq.clear();
+                    left = right;
+                    count = 0;
+                }
+            }
+        }
+
+        return result;
+    }
+}
