@@ -1,0 +1,26 @@
+import java.util.*;
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
+        Set<String> set = new HashSet<>(wordDict);
+
+        dp[n] = true;
+
+        for (int i = n - 1; i >= 0; i--) {
+            StringBuilder temp = new StringBuilder();
+
+            for (int j = i; j < n; j++) {
+                temp.append(s.charAt(j));
+
+                if (set.contains(temp.toString()) && dp[j + 1]) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        return dp[0];
+    }
+}
