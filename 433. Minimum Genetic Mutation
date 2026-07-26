@@ -1,0 +1,33 @@
+class Solution {
+    public int minMutation(String start, String end, String[] bank) {
+        Map<String, Integer> dist = new HashMap<>();
+        Queue<String> q = new LinkedList<>();
+
+        dist.put(start, 0);
+        q.offer(start);
+
+        while (!q.isEmpty()) {
+            String u = q.poll();
+
+            for (String v : bank) {
+                if (dist.containsKey(v)) {
+                    continue;
+                }
+
+                int cnt = 0;
+                for (int i = 0; i < 8; i++) {
+                    if (u.charAt(i) != v.charAt(i)) {
+                        cnt++;
+                    }
+                }
+
+                if (cnt == 1) {
+                    dist.put(v, dist.get(u) + 1);
+                    q.offer(v);
+                }
+            }
+        }
+
+        return dist.containsKey(end) ? dist.get(end) : -1;
+    }
+}
